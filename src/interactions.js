@@ -2,6 +2,7 @@
 import Store from './redux/Store';
 import * as ActionCreators from './redux/ActionCreators';
 import type { Coords } from './types';
+import { getPegAtPos, hasValidMoves } from './utils';
 
 export function onTouchTile(pos: Coords) {
   const state = Store.getState();
@@ -12,4 +13,11 @@ export function onTouchTile(pos: Coords) {
   }
 }
 
-export function onTouchPeg(pos: Coords) {}
+export function onTouchPeg(id: string) {
+  const { board, pegs } = Store.getState();
+  if (hasValidMoves(board, pegs[id].pos)) {
+    Store.dispatch(ActionCreators.excite(id));
+  } else {
+    Store.dispatch(ActionCreators.buzz(id));
+  }
+}

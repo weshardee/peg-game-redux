@@ -5,15 +5,18 @@ import type { Coords, Peg, PegType } from '../types';
 import shortid from 'shortid';
 import { hasValidMoves, areEqual, isValidMove, getMiddle } from '../utils';
 
-export type NullAction = {
-  type: 'NULL',
-};
+export type Action =
+  | NullAction
+  | PopulateAction
+  | WipeAction
+  | ExciteAction
+  | BuzzAction
+  | MoveAction;
 
-export type PopulateAction = {
-  type: 'POPULATE',
-  pegs: Array<Peg>,
-};
+export type WipeAction = { type: 'WIPE_BOARD' };
+export type NullAction = { type: 'NULL' };
 
+export type PopulateAction = { type: 'POPULATE', pegs: Array<Peg> };
 export const populate = (emptyPos: Coords): PopulateAction => {
   const pegs = [];
   Store.getState().board.forEach(position => {
@@ -24,20 +27,11 @@ export const populate = (emptyPos: Coords): PopulateAction => {
   return { type: 'POPULATE', pegs };
 };
 
-export type SelectAction = {
-  type: 'EXCITE' | 'DISAPPOINT',
-  id: string,
-};
+export type ExciteAction = { type: 'EXCITE', id: string };
+export const excite = (id: string): ExciteAction => ({ type: 'EXCITE', id });
 
-export const selectPeg = (id: string): SelectAction => {
-  const { board, pegs } = Store.getState();
-  const peg = pegs[id];
-  if (hasValidMoves(board, peg.pos)) {
-    return { type: 'EXCITE', id };
-  } else {
-    return { type: 'DISAPPOINT', id };
-  }
-};
+export type BuzzAction = { type: 'BUZZ', id: string };
+export const buzz = (id: string): BuzzAction => ({ type: 'BUZZ', id });
 
 export type MoveAction = {
   type: 'MOVE',
@@ -45,8 +39,7 @@ export type MoveAction = {
   to: Coords,
   kill: Peg,
 };
-
-export const moveTo = (to: Coords): ?MoveAction | SelectAction => {
+export const moveTo = (to: Coords): ?MoveAction | BuzzAction => {
   const state = (Store.getState(): State);
   const { excited, pegs, board } = state;
   if (!state.excited) {
@@ -55,7 +48,7 @@ export const moveTo = (to: Coords): ?MoveAction | SelectAction => {
   const pegPos = pegs[excited].pos;
   const isValid = isValidMove(board, pegPos, to);
   if (!isValid) {
-    return { type: 'DISAPPOINT', id: excited };
+    return buzz(excited);
   }
   const middlePos = getMiddle(pegPos, to);
   const middleID = board.get(middlePos);

@@ -3,13 +3,13 @@ import type Phaser from './Phaser';
 import type { PegType } from '../types';
 import { PEG_PROPS } from '../constants';
 import { boardToScreenPosition } from '../utils';
-import type { Coords } from '../types';
+import type { Peg } from '../types';
 import { fallIn } from './animations';
 import { onTouchPeg } from '../interactions';
 
 const SPRITESHEET_KEY = 'pegs';
 
-const Peg = {
+const Pegs = {
   preload(game: Phaser.Game) {
     game.load.spritesheet(
       SPRITESHEET_KEY,
@@ -21,20 +21,19 @@ const Peg = {
   },
 
   addSpriteToGameAndGroup(
-    position: Coords,
+    peg: Peg,
     game: Phaser.Game,
     group: Phaser.Group,
-    type: PegType,
   ): Phaser.Sprite {
-    const { x, y } = boardToScreenPosition(position);
-    const sprite = game.add.sprite(x, y, SPRITESHEET_KEY, type, group);
+    const { x, y } = boardToScreenPosition(peg.pos);
+    const sprite = game.add.sprite(x, y, SPRITESHEET_KEY, peg.type, group);
     sprite.anchor.x = PEG_PROPS.anchor.x;
     sprite.anchor.y = PEG_PROPS.anchor.y;
     sprite.inputEnabled = true;
-    sprite.events.onInputUp.add(onTouchPeg.bind(null, position));
+    sprite.events.onInputUp.add(onTouchPeg.bind(null, peg.id));
     fallIn(sprite);
     return sprite;
   },
 };
 
-export default Peg;
+export default Pegs;

@@ -2,10 +2,11 @@
 import { BOARD_SIZE, BOARD_GRID_SIZE, BOARD_ROW_HEIGHT } from './constants';
 import type { Coords } from './types';
 import type Board from './Board';
+import Store from './redux/Store';
 
 const JUMP_DISTANCE = 2;
 
-export function getMiddle(a: Coords, b: Coords): Coords {
+export function getMiddlePosition(a: Coords, b: Coords): Coords {
   const deltaX = a.x - b.x;
   const deltaY = a.y - b.y;
   return {
@@ -19,8 +20,9 @@ export function isValidMove(
   from: Coords,
   to: Coords,
 ): boolean {
-  if (to.x > to.y || to.y > board.size || to.y < 0 || to.x < 0) return false;
-  const middle = getMiddle(from, to);
+  if (to.x > to.y || to.y >= board.size || to.y < 0 || to.x < 0) return false;
+  const middle = getMiddlePosition(from, to);
+  console.log(middle, from, to);
   return board.get(middle) != null && board.get(to) == null;
 }
 
@@ -74,4 +76,9 @@ export function screenToBoardPosition(screenPos: Coords): Coords {
 
 export function areEqual(a: Coords, b: Coords) {
   return a.x === b.x && a.y === b.y;
+}
+
+export function getPegAtPos(pos: Coords) {
+  const { board, pegs } = Store.getState();
+  return pegs[board.get(pos)];
 }

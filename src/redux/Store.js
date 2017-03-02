@@ -3,7 +3,7 @@ import reducers from './reducers';
 import createLogger from 'redux-logger';
 
 import type Board from '../Board';
-import type Action from './Action';
+import type { Action } from './ActionCreators';
 
 type State = {
   message: ?string,

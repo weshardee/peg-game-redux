@@ -36,7 +36,6 @@ class GameState extends Phaser.State {
 
   _renderedPegs: Map<string, Phaser.Sprite> = new Map();
 
-
   _endMessage: Phaser.Text;
   _excitedTween: Phaser.Tween;
 
@@ -114,12 +113,11 @@ class GameState extends Phaser.State {
             }
           } else {
             // add sprite
+            const peg = pegs[id];
             sprite = Pegs.addSpriteToGameAndGroup(
-              position,
+              peg,
               this.game,
               this._pegsGroup,
-              pegs[id].type,
-              () => Store.dispatch(ActionCreators.selectPeg(id)),
             );
           }
           renderedPegs.set(id, sprite);
