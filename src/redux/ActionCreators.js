@@ -3,7 +3,12 @@ import Store from './Store';
 import type State from './Store';
 import type { Coords, Peg, PegType } from '../types';
 import shortid from 'shortid';
-import { hasValidMoves, areEqual, isValidMove, getMiddle } from '../utils';
+import {
+  hasValidMoves,
+  areEqual,
+  isValidMove,
+  getMiddlePosition,
+} from '../utils';
 
 export type Action =
   | NullAction
@@ -50,7 +55,7 @@ export const moveTo = (to: Coords): ?MoveAction | BuzzAction => {
   if (!isValid) {
     return buzz(excited);
   }
-  const middlePos = getMiddle(pegPos, to);
+  const middlePos = getMiddlePosition(pegPos, to);
   const middleID = board.get(middlePos);
   const kill = pegs[middleID];
   return {
