@@ -15,7 +15,10 @@ export default function pegs(pegs: State = {}, action: Action): State {
     case 'MOVE':
       const nextPegs = { ...pegs };
       delete nextPegs[action.kill.id];
-      nextPegs[action.id].pos = action.to;
+      nextPegs[action.id] = {
+        ...nextPegs[action.id],
+        pos: action.to,
+      };
       return nextPegs;
     default:
       return pegs;

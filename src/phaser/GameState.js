@@ -97,21 +97,15 @@ class GameState extends Phaser.State {
         if (id != null) {
           let sprite = this._renderedPegs.get(id);
           if (sprite) {
-            // move sprite
-            console.log(
-              'move',
-              id,
-              'from',
-              this.state.pegs[id].pos,
-              'to',
-              pegs[id].pos,
-            );
-            const { pos } = pegs[id];
-            if (this.state.board.get(pos) !== id) {
-              slide(sprite, pos);
-              this.game.sound.play('jump');
+            if (this.state.pegs[id].pos !== pegs[id].pos) {
+              // move sprite
+              const { pos } = pegs[id];
+              if (this.state.board.get(pos) !== id) {
+                slide(sprite, pos);
+                this.game.sound.play('jump');
+              }
             }
-          } else {
+          } else if (!renderedPegs.has(id)) {
             // add sprite
             const peg = pegs[id];
             sprite = Pegs.addSpriteToGameAndGroup(
