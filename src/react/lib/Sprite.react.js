@@ -14,6 +14,7 @@ type Props = {
   sheet: Spritesheet,
   anchor: { x: number, y: number },
   frame: number,
+  onClick: () => void,
 };
 
 function getSpriteSheetStyle(
@@ -37,6 +38,7 @@ class Sprite extends React.Component {
     anchorX: 0,
     anchorY: 0,
     frame: 0,
+    onClick: () => {},
   };
 
   render(): React.Element<any> {
@@ -49,7 +51,7 @@ class Sprite extends React.Component {
       left: (-props.sheet.width) * props.anchor.x,
       top: (-props.sheet.height) * props.anchor.y,
     };
-    return <div style={style} />;
+    return <div style={style} onClick={props.onClick} />;
   }
 }
 
