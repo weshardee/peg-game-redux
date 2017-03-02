@@ -13,6 +13,8 @@ export default function excited(state: State = null, action: Action): State {
       return null;
     case 'MOVE':
       return null;
+    case 'BUZZ':
+      return null;
     case 'EXCITE':
       return action.id;
     default:

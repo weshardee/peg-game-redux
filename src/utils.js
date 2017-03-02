@@ -22,7 +22,6 @@ export function isValidMove(
 ): boolean {
   if (to.x > to.y || to.y >= board.size || to.y < 0 || to.x < 0) return false;
   const middle = getMiddlePosition(from, to);
-  console.log(middle, from, to);
   return board.get(middle) != null && board.get(to) == null;
 }
 

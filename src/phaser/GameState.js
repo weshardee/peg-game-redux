@@ -141,11 +141,14 @@ class GameState extends Phaser.State {
       });
       this._renderedPegs = renderedPegs;
     }
-    if (excited && !this.state.excited) {
-      const sprite = this._renderedPegs.get(excited);
-      this._excitedTween = excite(sprite);
-    } else if (!excited && this._excitedTween) {
-      this._excitedTween.loop(false);
+    if (excited !== this.state.excited) {
+      if (this._excitedTween) {
+        this._excitedTween.loop(false);
+      }
+      if (excited) {
+        const sprite = this._renderedPegs.get(excited);
+        this._excitedTween = excite(sprite);
+      }
     }
     // TODO handle disappointment
     // shake(this.excited);
