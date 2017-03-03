@@ -1,13 +1,15 @@
 // @flow
-import Phaser from './Phaser';
+import Phaser from 'phaser-ce';
 
+import { wipe } from '../redux/ActionCreators';
 import Pegs from './Pegs';
 import Tiles from './Tiles';
 import Store from '../redux/Store';
 
 import { excite, fadeIn, fadeOut, slide } from './animations';
 
-import type { State } from '../redux/State';
+import type Board from '../Board';
+import type { Peg } from '../types';
 
 import {
   AUDIO_ERROR_ID,
@@ -26,15 +28,22 @@ const TEXT_STYLE = {
 };
 
 class GameState extends Phaser.State {
-  _state: State;
+  // local state used for iterating over changes
+  _board: Board<string>;
+  _renderedPegs: Map<string, Phaser.Sprite> = new Map();
+  _excited: ?string;
+  _buzzed: ?string;
+  _pegs: { [key: string]: Peg };
 
+  // render layering groups
   _boardGroup: Phaser.Group;
   _tilesGroup: Phaser.Group;
   _pegsGroup: Phaser.Group;
 
-  _renderedPegs: Map<string, Phaser.Sprite> = new Map();
-
+  // gui stuff
   _endMessage: Phaser.Text;
+
+  // animations
   _excitedTween: Phaser.Tween;
 
   /* Phaser GameState lifecycle methods
@@ -55,8 +64,7 @@ class GameState extends Phaser.State {
     this._tilesGroup = this.game.add.group(this._boardGroup, 'tiles');
     this._pegsGroup = this.game.add.group(this._boardGroup, 'pegs');
     // add reset button
-    this.game.add.button(0, 0, 'reset', () =>
-      Store.dispatch({ type: 'WIPE_BOARD' }));
+    this.game.add.button(0, 0, 'reset', () => Store.dispatch(wipe()));
     // add banner
     this._endMessage = this.game.add.text(
       this.world.width - 20,
@@ -70,8 +78,7 @@ class GameState extends Phaser.State {
     Store.subscribe(this.onStateChange);
     this.onStateChange();
     // for each board space, we need a tile
-    const { board } = this._state;
-    board.forEach(position => {
+    this._board.forEach(position => {
       const tile = Tiles.getSprite(position, this.game);
       this._tilesGroup.add(tile);
     });
@@ -89,7 +96,8 @@ class GameState extends Phaser.State {
     const state = Store.getState();
     const { board, pegs, excited } = state;
     // populate board
-    if (board !== this._state.board) {
+    if (board !== this._board) {
+      this._board = board;
       const renderedPegs: Map<string, Phaser.Sprite> = new Map();
       board.forEach((position, id) => {
         if (id != null) {
@@ -117,23 +125,10 @@ class GameState extends Phaser.State {
         }
       });
       // cleanup dead sprites
-      this._renderedPegs.forEach((sprite, id) => {
-        // animate death
-        this.game.tweens
-          .create(sprite)
-          .to({ alpha: 0 }, DEATH_DURATION)
-          .start();
-        const deathTween = this.game.tweens
-          .create(sprite.scale)
-          .to(DEATH_SCALE, DEATH_DURATION);
-        deathTween.onComplete.add(() => {
-          if (sprite) sprite.destroy();
-        });
-        deathTween.start();
-      });
+      this._renderedPegs.forEach((sprite, id) => this._onPegDeath);
       this._renderedPegs = renderedPegs;
     }
-    if (excited !== this._state.excited) {
+    if (excited !== this._excited) {
       if (this._excitedTween) {
         this._excitedTween.loop(false);
       }
@@ -153,6 +148,17 @@ class GameState extends Phaser.State {
     // }
     this._state = state;
   };
+
+  _onPegDeath(sprite: Phaser.Sprite) {
+    this.game.tweens.create(sprite).to({ alpha: 0 }, DEATH_DURATION).start();
+    const deathTween = this.game.tweens
+      .create(sprite.scale)
+      .to(DEATH_SCALE, DEATH_DURATION);
+    deathTween.onComplete.add(() => {
+      if (sprite) sprite.destroy();
+    });
+    deathTween.start();
+  }
 }
 
 export default GameState;

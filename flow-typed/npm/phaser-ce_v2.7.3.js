@@ -1,3 +1,5 @@
+/* eslint no-use-before-define: 0 */
+
 import { PIXI } from 'pixi';
 import { p2 } from 'p2';
 
@@ -6510,14 +6512,6 @@ declare class Phaser$State {
   resumed(): void,
   shutdown(): void,
   update(): void,
-}
-
-declare interface Phaser$IStateCycle {
-  preUpdate(): void,
-  update(): void,
-  render(): void,
-  postRender(): void,
-  destroy(): void,
 }
 
 declare class Phaser$StateManager {

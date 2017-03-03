@@ -1,6 +1,6 @@
 // @flow
 
-import Phaser from './Phaser';
+import Phaser from 'phaser-ce';
 
 import GameState from './GameState';
 

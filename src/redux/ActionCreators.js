@@ -8,7 +8,7 @@ import shortid from 'shortid';
 import type { Coords, Peg, PegType } from '../types';
 
 export type WipeAction = { type: 'WIPE_BOARD' };
-export type NullAction = { type: 'NULL' };
+export const wipe = () => ({ type: 'WIPE_BOARD' });
 
 export type PopulateAction = { type: 'POPULATE', pegs: Array<Peg> };
 export const populate = (emptyPos: Coords): PopulateAction => {
@@ -94,7 +94,6 @@ function makePeg(pos: Coords): Peg {
 ----------------------------------------------------------------------------- */
 
 export type Action =
-  | NullAction
   | PopulateAction
   | WipeAction
   | ExciteAction

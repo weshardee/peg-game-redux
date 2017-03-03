@@ -1,5 +1,5 @@
 // @flow
-import Phaser from './Phaser';
+import Phaser from 'phaser-ce';
 import { TILE_PROPS } from '../constants';
 import { boardToScreenPosition } from '../utils';
 import type { Coords } from '../types';

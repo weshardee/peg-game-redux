@@ -1,5 +1,5 @@
 // @flow
-import Phaser from './Phaser';
+import Phaser from 'phaser-ce';
 import { AUDIO_ERROR_ID } from '../constants';
 
 const SHAKE_DURATION = 100;
