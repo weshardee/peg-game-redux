@@ -1,14 +1,14 @@
 // @flow
 import type { Action } from '../ActionCreators';
 
-export type ExcitedState = ?string;
+export type BuzzedState = ?string;
 
-export default function excited(
-  state: ExcitedState = null,
+export default function buzzed(
+  state: BuzzedState = null,
   action: Action,
-): ExcitedState {
+): BuzzedState {
   switch (action.type) {
-    case 'EXCITE':
+    case 'BUZZ':
       return action.id;
     default:
       return null;

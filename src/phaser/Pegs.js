@@ -1,6 +1,5 @@
 // @flow
 import type Phaser from './Phaser';
-import type { PegType } from '../types';
 import { PEG_PROPS } from '../constants';
 import { boardToScreenPosition } from '../utils';
 import type { Peg } from '../types';

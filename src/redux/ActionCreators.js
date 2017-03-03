@@ -1,22 +1,11 @@
 // @flow
 import Store from './Store';
-import type State from './Store';
-import type { Coords, Peg, PegType } from '../types';
-import shortid from 'shortid';
-import {
-  hasValidMoves,
-  areEqual,
-  isValidMove,
-  getMiddlePosition,
-} from '../utils';
 
-export type Action =
-  | NullAction
-  | PopulateAction
-  | WipeAction
-  | ExciteAction
-  | BuzzAction
-  | MoveAction;
+import { areEqual, getMiddlePosition } from '../utils';
+import nullthrows from 'nullthrows';
+import shortid from 'shortid';
+
+import type { Coords, Peg, PegType } from '../types';
 
 export type WipeAction = { type: 'WIPE_BOARD' };
 export type NullAction = { type: 'NULL' };
@@ -36,31 +25,38 @@ export type ExciteAction = { type: 'EXCITE', id: string };
 export const excite = (id: string): ExciteAction => ({ type: 'EXCITE', id });
 
 export type BuzzAction = { type: 'BUZZ', id: string };
-export const buzz = (id: string): BuzzAction => ({ type: 'BUZZ', id });
+export const buzz = (id: string): BuzzAction => ({
+  type: 'BUZZ',
+  id,
+});
 
 export type MoveAction = {
   type: 'MOVE',
   id: string,
+  from: Coords,
   to: Coords,
   kill: Peg,
 };
 export const moveTo = (to: Coords): ?MoveAction | BuzzAction => {
-  const state = (Store.getState(): State);
+  const state = Store.getState();
   const { excited, pegs, board } = state;
-  if (!state.excited) {
+  if (!excited) {
     return;
   }
-  const pegPos = pegs[excited].pos;
-  const isValid = isValidMove(board, pegPos, to);
-  if (!isValid) {
+  const from = pegs[excited].pos;
+  if (!from || board.get(to)) {
     return buzz(excited);
   }
-  const middlePos = getMiddlePosition(pegPos, to);
+  const middlePos = getMiddlePosition(from, to);
   const middleID = board.get(middlePos);
-  const kill = pegs[middleID];
+  if (!middleID) {
+    return buzz(excited);
+  }
+  const kill = nullthrows(pegs[middleID]);
   return {
     type: 'MOVE',
     id: excited,
+    from,
     to,
     kill,
   };
@@ -82,14 +78,25 @@ function makePeg(pos: Coords): Peg {
   };
 }
 
-function isGameOver() {
-  // TODO
-  // this._pegsGroup.forEach(sprite => {
-  //   const pos = screenToBoardPosition(sprite);
-  //   sprite.alive = this.state.board.hasValidMoves(pos);
-  // });
-  //
-  // if (this._pegsGroup.getFirstAlive() === null) {
-  //   this.end();
-  // }
-}
+// TODO
+// function isGameOver() {
+// this._pegsGroup.forEach(sprite => {
+//   const pos = screenToBoardPosition(sprite);
+//   sprite.alive = this.state.board.hasValidMoves(pos);
+// });
+//
+// if (this._pegsGroup.getFirstAlive() === null) {
+//   this.end();
+// }
+// }
+
+/* Aggregate types
+----------------------------------------------------------------------------- */
+
+export type Action =
+  | NullAction
+  | PopulateAction
+  | WipeAction
+  | ExciteAction
+  | BuzzAction
+  | MoveAction;

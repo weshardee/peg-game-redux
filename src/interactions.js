@@ -2,14 +2,17 @@
 import Store from './redux/Store';
 import * as ActionCreators from './redux/ActionCreators';
 import type { Coords } from './types';
-import { getPegAtPos, hasValidMoves } from './utils';
+import { hasValidMoves } from './utils';
 
 export function onTouchTile(pos: Coords) {
   const state = Store.getState();
   if (state.phase === 'ready') {
     Store.dispatch(ActionCreators.populate(pos));
   } else if (state.excited) {
-    Store.dispatch(ActionCreators.moveTo(pos));
+    const action = ActionCreators.moveTo(pos);
+    if (action) {
+      Store.dispatch(action);
+    }
   }
 }
 

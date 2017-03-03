@@ -1,22 +1,15 @@
+// @flow
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';
 import createLogger from 'redux-logger';
 
-import type Board from '../Board';
+import type { Store } from 'redux';
 import type { Action } from './ActionCreators';
 
-type State = {
-  message: ?string,
-  board: Board,
-};
+// const createStoreWithMiddleware = applyMiddleware(
+//   createLogger(), // must be last
+// )(createStore);
 
-type Store = {
-  getState: () => State,
-  dispatch: (action: Action) => void,
-};
+const store: Store<Object, Action> = createStore(reducers);
 
-const createStoreWithMiddleware = applyMiddleware(
-  createLogger(), // must be last
-)(createStore);
-
-export default (createStoreWithMiddleware(reducers): Store);
+export default store;

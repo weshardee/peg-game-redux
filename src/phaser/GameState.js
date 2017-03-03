@@ -4,12 +4,10 @@ import Phaser from './Phaser';
 import Pegs from './Pegs';
 import Tiles from './Tiles';
 import Store from '../redux/Store';
-import type State from '../redux/Store';
-import * as ActionCreators from '../redux/ActionCreators';
-
-import { screenToBoardPosition } from '../utils';
 
 import { excite, fadeIn, fadeOut, slide } from './animations';
+
+import type { State } from '../redux/State';
 
 import {
   AUDIO_ERROR_ID,
@@ -28,7 +26,7 @@ const TEXT_STYLE = {
 };
 
 class GameState extends Phaser.State {
-  state: State;
+  _state: State;
 
   _boardGroup: Phaser.Group;
   _tilesGroup: Phaser.Group;
@@ -72,7 +70,7 @@ class GameState extends Phaser.State {
     Store.subscribe(this.onStateChange);
     this.onStateChange();
     // for each board space, we need a tile
-    const { board } = this.state;
+    const { board } = this._state;
     board.forEach(position => {
       const tile = Tiles.getSprite(position, this.game);
       this._tilesGroup.add(tile);
@@ -88,19 +86,19 @@ class GameState extends Phaser.State {
   onStateChange = () => {
     // TODO write this more declaratively;
     // TODO React binding for Phaser?
-    const state = (Store.getState(): State);
-    const { board, pegs, excited, phase } = state;
+    const state = Store.getState();
+    const { board, pegs, excited } = state;
     // populate board
-    if (board !== this.state.board) {
-      const renderedPegs = new Map();
+    if (board !== this._state.board) {
+      const renderedPegs: Map<string, Phaser.Sprite> = new Map();
       board.forEach((position, id) => {
         if (id != null) {
           let sprite = this._renderedPegs.get(id);
           if (sprite) {
-            if (this.state.pegs[id].pos !== pegs[id].pos) {
+            if (this._state.pegs[id].pos !== pegs[id].pos) {
               // move sprite
               const { pos } = pegs[id];
-              if (this.state.board.get(pos) !== id) {
+              if (this._state.board.get(pos) !== id) {
                 slide(sprite, pos);
                 this.game.sound.play('jump');
               }
@@ -135,7 +133,7 @@ class GameState extends Phaser.State {
       });
       this._renderedPegs = renderedPegs;
     }
-    if (excited !== this.state.excited) {
+    if (excited !== this._state.excited) {
       if (this._excitedTween) {
         this._excitedTween.loop(false);
       }
@@ -146,25 +144,14 @@ class GameState extends Phaser.State {
     }
     // TODO handle disappointment
     // shake(this.excited);
-    if (phase === 'gameover') {
-      this._endMessage.text = state.message;
-      fadeIn(this._endMessage);
-    } else {
-      fadeOut(this._endMessage);
-    }
-    this.state = state;
-  };
-
-  /* handlers
-  --------------------------------------------------------------------------- */
-
-  onTileClick = (sprite: Phaser.Sprite) => {
-    const boardPos = screenToBoardPosition(sprite);
-    if (this.state.phase === 'ready') {
-      Store.dispatch(ActionCreators.populate(boardPos));
-    } else if (this.state.excited) {
-      Store.dispatch(ActionCreators.moveTo(boardPos));
-    }
+    // TODO handle game over
+    // if (phase === 'gameover') {
+    //   this._endMessage.text = state.message;
+    //   fadeIn(this._endMessage);
+    // } else {
+    //   fadeOut(this._endMessage);
+    // }
+    this._state = state;
   };
 }
 

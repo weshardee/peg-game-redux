@@ -1,9 +1,10 @@
 // @flow
 import { connect } from 'react-redux';
-import type { State } from '../redux/Store';
 import Pegs from './Pegs.react';
 
-const mapStateToProps = (state: State) => ({
+// import type { State } from '../redux/Store';
+
+const mapStateToProps = (state: Object) => ({
   pegs: Object.values(state.pegs),
 });
 

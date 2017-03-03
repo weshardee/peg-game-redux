@@ -2,10 +2,12 @@
 import { BOARD_SIZE } from '../../constants';
 import Board from '../../Board';
 
-import type { Action } from '../Store';
+import type { Action } from '../ActionCreators';
+
+export type BoardState = Board<string>;
 
 export default function board(
-  board: Board<string> = new Board(BOARD_SIZE),
+  board: BoardState = new Board(BOARD_SIZE),
   action: Action,
 ): Board<string> {
   switch (action.type) {
@@ -18,7 +20,10 @@ export default function board(
       }
       return nextBoard;
     case 'MOVE':
-      return board.set(action.to, action.id).set(action.kill.pos, null);
+      return board
+        .set(action.to, action.id)
+        .set(action.kill.pos, null)
+        .set(action.from, null);
     default:
       return board;
   }

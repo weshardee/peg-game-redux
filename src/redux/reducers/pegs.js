@@ -1,10 +1,10 @@
 // @flow
-import type { Action } from '../Store';
+import type { Action } from '../ActionCreators';
 import type { Peg } from '../../types';
 
-type State = { [key: string]: Peg };
+export type PegsState = { [key: string]: Peg };
 
-export default function pegs(pegs: State = {}, action: Action): State {
+export default function pegs(pegs: PegsState = {}, action: Action): PegsState {
   switch (action.type) {
     case 'POPULATE':
       const newPegs = {};
@@ -13,7 +13,7 @@ export default function pegs(pegs: State = {}, action: Action): State {
     case 'WIPE_BOARD':
       return {};
     case 'MOVE':
-      const nextPegs = { ...pegs };
+      const nextPegs: PegsState = { ...pegs };
       delete nextPegs[action.kill.id];
       nextPegs[action.id] = {
         ...nextPegs[action.id],

@@ -1,5 +1,5 @@
 // @flow
-import type { Action } from '../Store';
+import type { Action } from '../ActionCreators';
 
 type State = number;
 

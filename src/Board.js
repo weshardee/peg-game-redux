@@ -36,6 +36,7 @@ class Board<T> {
     invariant(x <= y && y <= this.size, 'invalid board position');
     const nextBoard = new Board(this.size, this);
     nextBoard.__rows[y][x] = value;
+    if (!value) console.log(x, y, nextBoard.toString());
     return nextBoard;
   }
 
