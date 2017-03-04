@@ -1,6 +1,5 @@
 // @flow
 import Phaser from 'phaser-ce';
-import nullthrows from 'nullthrows';
 
 import { wipe } from '../redux/ActionCreators';
 import Pegs from './Pegs';
