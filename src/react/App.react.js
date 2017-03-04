@@ -6,9 +6,6 @@ import Board from './Board.react';
 
 import { GAME_STYLE } from '../constants';
 
-/* view
-------------------------------------------------------------------------------*/
-
 const App = () => <Stage {...GAME_STYLE}><Board /></Stage>;
 
 export default App;
