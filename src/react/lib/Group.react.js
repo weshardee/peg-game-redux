@@ -8,19 +8,17 @@ type Props = {
   children?: React.Element<any>,
 };
 
-const Group = (props: Props) => {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        transform: transform(props.x, props.y),
-      }}
-    >
-      {props.children}
-    </div>
-  );
-};
+const Group = ({ x, y, children }: Props) => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      transform: transform({ x, y }),
+    }}
+  >
+    {children}
+  </div>
+);
 
 export default Group;
