@@ -24,3 +24,7 @@ export function onTouchPeg(id: string) {
     Store.dispatch(ActionCreators.buzz(id));
   }
 }
+
+export function onTouchReset() {
+  Store.dispatch(ActionCreators.wipe());
+}

@@ -41,7 +41,7 @@ class Sprite extends React.Component<DefaultProps, Props, void> {
     rotation: 0,
     x: 0,
     y: 0,
-    anchor: { x: 0, y: 0 },
+    anchor: { x: 0.5, y: 0.5 },
     onClick: () => {},
     frame: 0,
   };

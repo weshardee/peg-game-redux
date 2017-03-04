@@ -1,7 +1,6 @@
 // @flow
 import Phaser from 'phaser-ce';
 
-import { wipe } from '../redux/ActionCreators';
 import Pegs from './Pegs';
 import Tiles from './Tiles';
 import Store from '../redux/Store';
@@ -9,10 +8,10 @@ import Store from '../redux/Store';
 import { excite, fadeIn, fadeOut } from './animations';
 import isGameOver from '../redux/selectors/isGameOver';
 import getGameOverMessage from '../redux/selectors/getGameOverMessage';
+import { onTouchReset } from '../interactions';
 
 import type { State } from '../redux/State';
 import type { PegEntity } from './Pegs';
-
 import { RESET_URI, GAME_STYLE, BOARD_X, BOARD_Y } from '../constants';
 
 const TEXT_STYLE = {
@@ -53,7 +52,7 @@ class GameState extends Phaser.State {
     this._tilesGroup = this.game.add.group(this._boardGroup, 'tiles');
     this._pegsGroup = this.game.add.group(this._boardGroup, 'pegs');
     // add reset button
-    this.game.add.button(0, 0, 'reset', () => Store.dispatch(wipe()));
+    this.game.add.button(0, 0, 'reset', onTouchReset);
     // add banner
     this._endMessage = this.game.add.text(
       this.world.width - 20,
