@@ -1,22 +1,21 @@
 // @flow
 import Phaser from 'phaser-ce';
+import nullthrows from 'nullthrows';
 
 import { wipe } from '../redux/ActionCreators';
 import Pegs from './Pegs';
 import Tiles from './Tiles';
 import Store from '../redux/Store';
 
-import { excite, fadeIn, fadeOut, slide } from './animations';
+import { excite, fadeIn, fadeOut } from './animations';
 
-import type Board from '../Board';
-import type { Peg } from '../types';
+import type { State } from '../types';
+import type { PegEntity } from './Pegs';
 
 import {
   AUDIO_ERROR_ID,
   AUDIO_ERROR_URI,
   AUDIO_JUMP_URI,
-  DEATH_DURATION,
-  DEATH_SCALE,
   RESET_URI,
   GAME_STYLE,
   BOARD_X,
@@ -29,11 +28,8 @@ const TEXT_STYLE = {
 
 class GameState extends Phaser.State {
   // local state used for iterating over changes
-  _board: Board<string>;
-  _renderedPegs: Map<string, Phaser.Sprite> = new Map();
-  _excited: ?string;
-  _buzzed: ?string;
-  _pegs: { [key: string]: Peg };
+  _state: State;
+  _pegEntities: Map<string, PegEntity> = new Map();
 
   // render layering groups
   _boardGroup: Phaser.Group;
@@ -54,7 +50,7 @@ class GameState extends Phaser.State {
     Pegs.preload(this.game);
     this.game.load.audio('jump', AUDIO_JUMP_URI);
     this.game.load.audio(AUDIO_ERROR_ID, AUDIO_ERROR_URI);
-    this.game.load.image('reset', RESET_URI, 190, 49);
+    this.game.load.image('reset', RESET_URI);
   }
 
   create() {
@@ -78,7 +74,7 @@ class GameState extends Phaser.State {
     Store.subscribe(this.onStateChange);
     this.onStateChange();
     // for each board space, we need a tile
-    this._board.forEach(position => {
+    this._state.board.forEach(position => {
       const tile = Tiles.getSprite(position, this.game);
       this._tilesGroup.add(tile);
     });
@@ -93,48 +89,40 @@ class GameState extends Phaser.State {
   onStateChange = () => {
     // TODO write this more declaratively;
     // TODO React binding for Phaser?
-    const state = Store.getState();
-    const { board, pegs, excited } = state;
+    const nextState = Store.getState();
+    const { board, pegs, excited } = nextState;
     // populate board
-    if (board !== this._board) {
-      this._board = board;
-      const renderedPegs: Map<string, Phaser.Sprite> = new Map();
-      board.forEach((position, id) => {
-        if (id != null) {
-          let sprite = this._renderedPegs.get(id);
-          if (sprite) {
-            if (this._state.pegs[id].pos !== pegs[id].pos) {
-              // move sprite
-              const { pos } = pegs[id];
-              if (this._state.board.get(pos) !== id) {
-                slide(sprite, pos);
-                this.game.sound.play('jump');
-              }
-            }
-          } else if (!renderedPegs.has(id)) {
-            // add sprite
-            const peg = pegs[id];
-            sprite = Pegs.addSpriteToGameAndGroup(
-              peg,
-              this.game,
-              this._pegsGroup,
-            );
+    if (
+      !this._state || this._state.board !== board || this._state.pegs !== pegs
+    ) {
+      const pegEntities: Map<string, PegEntity> = new Map();
+      board.forEach((pos, id) => {
+        let pegEntity;
+        if (id) {
+          pegEntity = this._pegEntities.get(id);
+          this._pegEntities.delete(id);
+          if (!pegEntity) {
+            pegEntity = Pegs.get(pegs[id], this.game, this._pegsGroup);
+          } else {
+            Pegs.update(pegEntity, pos);
           }
-          renderedPegs.set(id, sprite);
-          this._renderedPegs.delete(id);
+          pegEntities.set(id, pegEntity);
         }
       });
       // cleanup dead sprites
-      this._renderedPegs.forEach((sprite, id) => this._onPegDeath);
-      this._renderedPegs = renderedPegs;
+      this._pegEntities.forEach(Pegs.kill);
+      this._pegEntities = pegEntities;
     }
     if (excited !== this._excited) {
       if (this._excitedTween) {
+        // turn off any existing tween
         this._excitedTween.loop(false);
       }
       if (excited) {
-        const sprite = this._renderedPegs.get(excited);
-        this._excitedTween = excite(sprite);
+        const entity = this._pegEntities.get(excited);
+        if (entity) {
+          this._excitedTween = excite(entity.sprite);
+        }
       }
     }
     // TODO handle disappointment
@@ -146,19 +134,8 @@ class GameState extends Phaser.State {
     // } else {
     //   fadeOut(this._endMessage);
     // }
-    this._state = state;
+    this._state = nextState;
   };
-
-  _onPegDeath(sprite: Phaser.Sprite) {
-    this.game.tweens.create(sprite).to({ alpha: 0 }, DEATH_DURATION).start();
-    const deathTween = this.game.tweens
-      .create(sprite.scale)
-      .to(DEATH_SCALE, DEATH_DURATION);
-    deathTween.onComplete.add(() => {
-      if (sprite) sprite.destroy();
-    });
-    deathTween.start();
-  }
 }
 
 export default GameState;

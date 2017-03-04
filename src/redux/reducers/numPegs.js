@@ -1,9 +1,12 @@
 // @flow
 import type { Action } from '../ActionCreators';
 
-type State = number;
+export type NumPegsState = number;
 
-export default function numPegs(state: State = 0, action: Action): State {
+export default function numPegs(
+  state: NumPegsState = 0,
+  action: Action,
+): NumPegsState {
   switch (action.type) {
     case 'WIPE_BOARD':
       return 0;

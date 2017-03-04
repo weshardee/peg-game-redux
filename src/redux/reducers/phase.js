@@ -1,9 +1,12 @@
 // @flow
 import type { Action } from '../ActionCreators';
 
-type State = 'ready' | 'picking' | 'excited' | 'gameover';
+export type PhaseState = 'ready' | 'picking' | 'excited' | 'gameover';
 
-export default function excited(state: State = 'ready', action: Action): State {
+export default function excited(
+  state: PhaseState = 'ready',
+  action: Action,
+): PhaseState {
   switch (action.type) {
     case 'WIPE_BOARD':
       return 'ready';
