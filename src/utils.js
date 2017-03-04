@@ -55,6 +55,10 @@ export function hasValidMoves(board: Board<any>, { x, y }: Coords): boolean {
   return ends.some(to => isValidMove(board, from, to));
 }
 
+export function hasAnyValidMoves(board: Board<any>) {
+  return board.some((pos, value) => hasValidMoves(board, pos));
+}
+
 function getXOffset(y) {
   return BOARD_SIZE - y * BOARD_GRID_SIZE / 2;
 }

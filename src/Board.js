@@ -55,6 +55,20 @@ class Board<T> {
     }
   }
 
+  some(cb: (coords: BoardCoords, value: ?T) => boolean): boolean {
+    for (let y = 0; y < this.size; y++) {
+      const row = this.__rows[y];
+      const rowSize = row.length;
+      for (let x = 0; x < rowSize; x++) {
+        const coords = { x, y };
+        const value = this.__rows[y][x];
+        const truthy = cb(coords, value);
+        if (truthy) return true;
+      }
+    }
+    return false;
+  }
+
   map(cb: (coords: BoardCoords, value: ?T) => ?T): Board<T> {
     const nextBoard = this.wipe();
     this.forEach((pos, value) => {
