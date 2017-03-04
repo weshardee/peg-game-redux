@@ -1,7 +1,7 @@
 // @flow
 import type { Action } from '../ActionCreators';
 
-export type PhaseState = 'ready' | 'picking' | 'excited' | 'gameover';
+export type PhaseState = 'ready' | 'picking' | 'excited';
 
 export default function excited(
   state: PhaseState = 'ready',

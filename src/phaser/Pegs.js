@@ -1,6 +1,13 @@
 // @flow
 import type Phaser from 'phaser-ce';
-import { DEATH_DURATION, DEATH_SCALE, PEG_PROPS } from '../constants';
+import {
+  AUDIO_ERROR_ID,
+  AUDIO_ERROR_URI,
+  AUDIO_JUMP_URI,
+  DEATH_DURATION,
+  DEATH_SCALE,
+  PEG_PROPS,
+} from '../constants';
 import { boardToScreenPosition } from '../utils';
 import type { Peg, Coords } from '../types';
 import { fallIn } from './animations';
@@ -23,6 +30,8 @@ const Pegs = {
       PEG_PROPS.sheet.height,
       PEG_PROPS.sheet.length,
     );
+    game.load.audio('jump', AUDIO_JUMP_URI);
+    game.load.audio(AUDIO_ERROR_ID, AUDIO_ERROR_URI);
   },
 
   get(peg: Peg, game: Phaser.Game, group: Phaser.Group): PegEntity {

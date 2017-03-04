@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import Pegs from './Pegs.react';
 
-import type { State } from '../types';
+import type { State } from '../redux/State';
 
 const mapStateToProps = (state: State) => ({
   pegs: Object.values(state.pegs),

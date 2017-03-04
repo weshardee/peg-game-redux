@@ -59,10 +59,3 @@ export const DEATH_SCALE = Object.freeze({
   x: 0,
   y: 0,
 });
-
-export const END_MESSAGES = [
-  "You're a Genius",
-  "You're Pretty Smart",
-  'Just Plain Dumb',
-  'Just Plain Eg-no-ra-moose',
-];

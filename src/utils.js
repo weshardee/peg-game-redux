@@ -3,8 +3,6 @@ import { BOARD_SIZE, BOARD_GRID_SIZE, BOARD_ROW_HEIGHT } from './constants';
 import type { Coords } from './types';
 import type Board from './Board';
 
-const JUMP_DISTANCE = 2;
-
 export function getMiddlePosition(a: Coords, b: Coords): Coords {
   const deltaX = a.x - b.x;
   const deltaY = a.y - b.y;
@@ -24,39 +22,20 @@ export function isValidMove(
   return board.get(middle) != null && board.get(to) == null;
 }
 
-export function hasValidMoves(board: Board<any>, { x, y }: Coords): boolean {
-  const from = { x, y };
-  const ends = [
-    {
-      x,
-      y: y + JUMP_DISTANCE,
-    },
-    {
-      x,
-      y: y - JUMP_DISTANCE,
-    },
-    {
-      x: x - JUMP_DISTANCE,
-      y: y - JUMP_DISTANCE,
-    },
-    {
-      x: x + JUMP_DISTANCE,
-      y: y + JUMP_DISTANCE,
-    },
-    {
-      x: x + JUMP_DISTANCE,
-      y,
-    },
-    {
-      x: x - JUMP_DISTANCE,
-      y,
-    },
-  ];
-  return ends.some(to => isValidMove(board, from, to));
-}
+const MOVE_DIRECTIONS = [
+  { x: 0, y: 2 },
+  { x: 0, y: -2 },
+  { x: -2, y: -2 },
+  { x: -2, y: 0 },
+  { x: 2, y: 2 },
+  { x: 2, y: 0 },
+];
 
-export function hasAnyValidMoves(board: Board<any>) {
-  return board.some((pos, value) => hasValidMoves(board, pos));
+export function hasValidMoves(board: Board<any>, from: Coords): boolean {
+  // make sure there's a peg at the coordinates
+  if (board.get(from) == null) return false;
+  return MOVE_DIRECTIONS.map(dir => ({ x: from.x + dir.x, y: from.y + dir.y }))
+    .some(to => isValidMove(board, from, to));
 }
 
 function getXOffset(y) {

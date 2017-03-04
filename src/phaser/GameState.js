@@ -7,19 +7,13 @@ import Tiles from './Tiles';
 import Store from '../redux/Store';
 
 import { excite, fadeIn, fadeOut } from './animations';
+import isGameOver from '../redux/selectors/isGameOver';
+import getGameOverMessage from '../redux/selectors/getGameOverMessage';
 
-import type { State } from '../types';
+import type { State } from '../redux/State';
 import type { PegEntity } from './Pegs';
 
-import {
-  AUDIO_ERROR_ID,
-  AUDIO_ERROR_URI,
-  AUDIO_JUMP_URI,
-  RESET_URI,
-  GAME_STYLE,
-  BOARD_X,
-  BOARD_Y,
-} from '../constants';
+import { RESET_URI, GAME_STYLE, BOARD_X, BOARD_Y } from '../constants';
 
 const TEXT_STYLE = {
   fill: '#ffffff',
@@ -47,8 +41,6 @@ class GameState extends Phaser.State {
   preload() {
     Tiles.preload(this.game);
     Pegs.preload(this.game);
-    this.game.load.audio('jump', AUDIO_JUMP_URI);
-    this.game.load.audio(AUDIO_ERROR_ID, AUDIO_ERROR_URI);
     this.game.load.image('reset', RESET_URI);
   }
 
@@ -56,6 +48,8 @@ class GameState extends Phaser.State {
     this.game.stage.backgroundColor = GAME_STYLE.backgroundColor;
     // initialize groups for tiles and pegs
     this._boardGroup = this.game.add.group(undefined, 'board');
+    this._boardGroup.x = BOARD_X;
+    this._boardGroup.y = BOARD_Y;
     this._tilesGroup = this.game.add.group(this._boardGroup, 'tiles');
     this._pegsGroup = this.game.add.group(this._boardGroup, 'pegs');
     // add reset button
@@ -77,9 +71,6 @@ class GameState extends Phaser.State {
       const tile = Tiles.getSprite(position, this.game);
       this._tilesGroup.add(tile);
     });
-    // center board
-    this._boardGroup.x = BOARD_X;
-    this._boardGroup.y = BOARD_Y;
   }
 
   /* Redux state binding
@@ -124,15 +115,17 @@ class GameState extends Phaser.State {
         }
       }
     }
+    if (isGameOver(nextState)) {
+      this._endMessage.text = getGameOverMessage(nextState);
+      fadeIn(this._endMessage);
+    } else {
+      fadeOut(this._endMessage);
+    }
+
     // TODO handle disappointment
     // shake(this.excited);
     // TODO handle game over
     // if (phase === 'gameover') {
-    //   this._endMessage.text = state.message;
-    //   fadeIn(this._endMessage);
-    // } else {
-    //   fadeOut(this._endMessage);
-    // }
     this._state = nextState;
   };
 }

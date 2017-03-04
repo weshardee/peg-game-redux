@@ -1,11 +1,12 @@
 // @flow
 import { createSelector } from 'reselect';
-import type { State } from '../../types';
-import type { BoardState } from '../reducers/board';
-import { hasAnyValidMoves } from '../../utils';
+import { hasValidMoves } from '../../utils';
+import { getBoard, getPhase } from '../State';
 
-const getBoard = (state: State): BoardState => state.board;
-
-const isGameOver = createSelector([getBoard], hasAnyValidMoves);
+const isGameOver = createSelector(
+  [getPhase, getBoard],
+  (phase, board) =>
+    phase !== 'ready' && !board.any((pos, value) => hasValidMoves(board, pos)),
+);
 
 export default isGameOver;
