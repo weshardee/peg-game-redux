@@ -1,7 +1,7 @@
 // @flow
 import { Motion, spring } from 'react-motion';
 import React from 'react';
-import Sprite from './lib/Sprite.react';
+import Image from './lib/Image.react';
 import { onTouchReset } from '../interactions';
 import { RESET_URI } from '../constants';
 
@@ -18,12 +18,6 @@ type AnimateProps = {
   spin: number,
 };
 
-const SPRITESHEET = {
-  uri: RESET_URI,
-  width: 50,
-  height: 50,
-};
-
 class ResetBtn extends React.Component {
   props: Props;
   state: State = { spin: 0 };
@@ -37,12 +31,14 @@ class ResetBtn extends React.Component {
           spin: spring(spin),
         }}
         children={({ spin }: AnimateProps) => (
-          <Sprite
+          <Image
+            src={RESET_URI}
+            width={50}
+            height={50}
             x={this.props.x}
             y={this.props.y}
-            onClick={this._onTouch}
             rotation={spin}
-            sheet={SPRITESHEET}
+            onClick={this._onTouch}
           />
         )}
       />

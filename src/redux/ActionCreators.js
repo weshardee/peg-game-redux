@@ -5,6 +5,7 @@ import { areEqual, getMiddlePosition } from '../utils';
 import nullthrows from 'nullthrows';
 import shortid from 'shortid';
 
+import { default as PegSheets } from '../sprites/peg/peg';
 import type { Coords, Peg, PegType } from '../types';
 
 export type WipeAction = { type: 'WIPE_BOARD' };
@@ -62,10 +63,11 @@ export const moveTo = (to: Coords): ?MoveAction | BuzzAction => {
   };
 };
 
-/* helpers
------------------------------------------------------------------------------ */
+// -----------------------------------------------------------------------------
+// helpers
+// -----------------------------------------------------------------------------
 
-const PEG_TYPES = [0, 1, 2, 3, 4];
+const PEG_TYPES = Object.keys(PegSheets);
 function randomPegType(): PegType {
   return PEG_TYPES[Math.floor(Math.random() * PEG_TYPES.length)];
 }
@@ -90,8 +92,9 @@ function makePeg(pos: Coords): Peg {
 // }
 // }
 
-/* Aggregate types
------------------------------------------------------------------------------ */
+// -----------------------------------------------------------------------------
+// Aggregate types
+// -----------------------------------------------------------------------------
 
 export type Action =
   | PopulateAction

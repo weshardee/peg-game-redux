@@ -61,7 +61,7 @@ class GameState extends Phaser.State {
       '',
       TEXT_STYLE,
     );
-    this._endMessage.anchor.x = 1;
+    this._endMessage.pivot.x = 1;
     // this._endMessage.alpha = 0;
     // attach to Store
     Store.subscribe(this.onStateChange);

@@ -43,8 +43,8 @@ const Pegs = {
       peg.type,
       group,
     );
-    sprite.anchor.x = PEG_PROPS.anchor.x;
-    sprite.anchor.y = PEG_PROPS.anchor.y;
+    sprite.pivot.x = PEG_PROPS.pivot.x;
+    sprite.pivot.y = PEG_PROPS.pivot.y;
     sprite.inputEnabled = true;
     sprite.events.onInputUp.add(onTouchPeg.bind(null, peg.id));
     fallIn(sprite);

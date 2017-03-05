@@ -31,7 +31,7 @@ export const RESET_URI = '/assets/images/return.png';
 
 // pegs
 export const PEG_PROPS = {
-  anchor: { x: 0.5, y: 0.8 },
+  pivot: { x: 0.5, y: 0.8 },
   sheet: {
     uri: '/assets/images/pegs.png',
     width: 40,
@@ -42,14 +42,11 @@ export const PEG_PROPS = {
 
 // tiles
 export const TILE_PROPS = {
-  anchor: { x: 0.5, y: 0.375 },
-  sheet: {
-    uri: '/assets/images/tiles.png',
-    width: BOARD_GRID_SIZE,
-    height: 89,
-    length: 4,
-  },
-  frame: 0,
+  pivot: { x: 0.5, y: 0.375 },
+  width: BOARD_GRID_SIZE,
+  height: 89,
+  src: '/assets/images/tiles.png',
+  length: 4, // only for Phaser
 };
 
 // death animation

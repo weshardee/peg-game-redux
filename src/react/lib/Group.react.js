@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import transform from './styles/transform';
+import getTransform from './styles/getTransform';
 
 type Props = {
   x: number,
@@ -14,7 +14,7 @@ const Group = ({ x, y, children }: Props) => (
       position: 'absolute',
       top: 0,
       left: 0,
-      transform: transform({ x, y }),
+      transform: getTransform({ x, y }),
     }}
   >
     {children}

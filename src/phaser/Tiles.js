@@ -11,18 +11,18 @@ const Tiles = {
   preload(game: Phaser.Game) {
     game.load.spritesheet(
       SPRITESHEET_KEY,
-      TILE_PROPS.sheet.uri,
-      TILE_PROPS.sheet.width,
-      TILE_PROPS.sheet.height,
-      TILE_PROPS.sheet.length,
+      TILE_PROPS.src,
+      TILE_PROPS.width,
+      TILE_PROPS.height,
+      TILE_PROPS.length,
     );
   },
 
   getSprite(position: Coords, game: Phaser.Game): Phaser.Sprite {
     const { x, y } = boardToScreenPosition(position);
     const sprite = new Phaser.Sprite(game, x, y, SPRITESHEET_KEY, 0);
-    sprite.anchor.x = TILE_PROPS.anchor.x;
-    sprite.anchor.y = TILE_PROPS.anchor.y;
+    sprite.pivot.x = TILE_PROPS.pivot.x;
+    sprite.pivot.y = TILE_PROPS.pivot.y;
     sprite.inputEnabled = true;
     sprite.events.onInputUp.add(onTouchTile.bind(null, position));
     return sprite;

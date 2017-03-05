@@ -1,7 +1,7 @@
 // @flow
 import { Motion, spring } from 'react-motion';
 import React from 'react';
-import Sprite from './lib/Sprite.react';
+import Image from './lib/Image.react';
 import { boardToScreenPosition } from '../utils';
 import { TILE_PROPS } from '../constants';
 import { onTouchTile } from '../interactions';
@@ -22,7 +22,7 @@ const Tile = (props: Props) => {
       defaultStyle={{ y: screenPos.y + 600 }}
       style={{ y: spring(screenPos.y) }}
       children={({ y }: AnimatedProps) => (
-        <Sprite
+        <Image
           {...TILE_PROPS}
           x={screenPos.x}
           y={y}

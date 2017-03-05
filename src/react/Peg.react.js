@@ -1,11 +1,13 @@
 // @flow
 import { Motion, spring } from 'react-motion';
 import React from 'react';
-import Sprite from './lib/Sprite.react';
-import { PEG_PROPS } from '../constants';
+import Image from './lib/Image.react';
+import Group from './lib/Group.react';
 import { boardToScreenPosition } from '../utils';
 import type { Peg as PegProps } from '../types';
 import { onTouchPeg } from '../interactions';
+import sprites from '../sprites/peg/peg';
+import shadow from '../sprites/peg/shadow.png';
 
 type Props = PegProps & {
   isExcited?: boolean,
@@ -53,7 +55,6 @@ class Peg extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('will unmount', this);
     if (this._wobbleInterval) {
       clearInterval(this._wobbleInterval);
     }
@@ -64,16 +65,26 @@ class Peg extends React.Component {
     const screenPos = boardToScreenPosition(pos);
     const { lean } = this.state;
     const interpolate = ({ offsetY, lean, x, y }: AnimateProps) => (
-      <Sprite
-        {...PEG_PROPS}
-        frame={type}
-        x={x}
-        y={y - Math.abs(offsetY)} /* reflect to sim a bounce*/
-        onClick={this._onTouch}
-        rotation={lean * LEAN_AMOUNT}
-        alpha={alive}
-        scale={alive}
-      />
+      <Group x={x} y={y}>
+        <Image
+          alpha={alive}
+          src={shadow}
+          scale={alive * 0.5} /* TODO handle retina better*/
+          width={56}
+          height={22}
+        />
+        <Image
+          alpha={alive}
+          src={sprites[type].img}
+          onClick={this._onTouch}
+          pivot={{ x: 0.5, y: 1 }}
+          rotation={lean * LEAN_AMOUNT}
+          scale={alive * 0.5}
+          width={64}
+          height={92}
+          y={-Math.abs(offsetY)} /* reflect to sim a bounce*/
+        />
+      </Group>
     );
     return (
       <Motion
