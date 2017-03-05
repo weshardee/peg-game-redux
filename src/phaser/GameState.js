@@ -5,7 +5,8 @@ import Pegs from './Pegs';
 import Tiles from './Tiles';
 import Store from '../redux/Store';
 
-import { excite, fadeIn, fadeOut } from './animations';
+import nullthrows from 'nullthrows';
+import { excite, fadeIn, fadeOut, shake } from './animations';
 import isGameOver from '../redux/selectors/isGameOver';
 import getGameOverMessage from '../redux/selectors/getGameOverMessage';
 import { onTouchReset } from '../interactions';
@@ -79,7 +80,7 @@ class GameState extends Phaser.State {
     // TODO write this more declaratively;
     // TODO React binding for Phaser?
     const nextState = Store.getState();
-    const { board, pegs, excited } = nextState;
+    const { board, pegs, excited, buzzed } = nextState;
     // populate board
     if (
       !this._state || this._state.board !== board || this._state.pegs !== pegs
@@ -120,9 +121,11 @@ class GameState extends Phaser.State {
     } else {
       fadeOut(this._endMessage);
     }
-
+    if (buzzed) {
+      const entity = nullthrows(this._pegEntities.get(buzzed));
+      shake(entity.sprite);
+    }
     // TODO handle disappointment
-    // shake(this.excited);
     // TODO handle game over
     // if (phase === 'gameover') {
     this._state = nextState;

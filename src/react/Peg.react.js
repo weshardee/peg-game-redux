@@ -53,6 +53,7 @@ class Peg extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log('will unmount', this);
     if (this._wobbleInterval) {
       clearInterval(this._wobbleInterval);
     }
