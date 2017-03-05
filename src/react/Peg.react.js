@@ -9,6 +9,7 @@ import { onTouchPeg } from '../interactions';
 
 type Props = PegProps & {
   isExcited?: boolean,
+  alive: number,
 };
 
 type State = {
@@ -58,8 +59,21 @@ class Peg extends React.Component {
   }
 
   render() {
-    const screenPos = boardToScreenPosition(this.props.pos);
+    const { pos, alive, type } = this.props;
+    const screenPos = boardToScreenPosition(pos);
     const { lean } = this.state;
+    const interpolate = ({ offsetY, lean, x, y }: AnimateProps) => (
+      <Sprite
+        {...PEG_PROPS}
+        frame={type}
+        x={x}
+        y={y - Math.abs(offsetY)} /* reflect to sim a bounce*/
+        onClick={this._onTouch}
+        rotation={lean * LEAN_AMOUNT}
+        alpha={alive}
+        scale={alive}
+      />
+    );
     return (
       <Motion
         defaultStyle={{ offsetY: 600, lean, x: screenPos.x, y: screenPos.y }}
@@ -69,16 +83,7 @@ class Peg extends React.Component {
           x: spring(screenPos.x, sliding),
           y: spring(screenPos.y, sliding),
         }}
-        children={({ offsetY, lean, x, y }: AnimateProps) => (
-          <Sprite
-            {...PEG_PROPS}
-            frame={this.props.type}
-            x={x}
-            y={y - Math.abs(offsetY)} /* reflect to sim a bounce*/
-            onClick={this._onTouch}
-            rotation={lean * LEAN_AMOUNT}
-          />
-        )}
+        children={interpolate}
       />
     );
   }

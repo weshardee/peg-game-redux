@@ -3,6 +3,7 @@ type Props = {
   x?: number,
   y?: number,
   rotation?: number,
+  scale?: number,
 };
 
 export default function transform(props: Props): string {
@@ -15,6 +16,9 @@ export default function transform(props: Props): string {
   }
   if (props.rotation) {
     transforms.push(`rotate(${props.rotation}turn)`);
+  }
+  if (props.scale != null && props.scale !== 1) {
+    transforms.push(`scale(${props.scale})`);
   }
   return transforms.join(' ');
 }
