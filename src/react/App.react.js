@@ -16,10 +16,10 @@ const App = () => (
       <Tiles />
       <PegsContainer />
     </Group>
-    <ResetBtn x={25} y={25} />
     <Group y={14} x={GAME_STYLE.width - 20}>
       <StatusMsg />
     </Group>
+    <ResetBtn x={25} y={25} />
   </Stage>
 );
 
