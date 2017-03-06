@@ -2,8 +2,8 @@
 import React from 'react';
 
 type Props = {
-  width: number,
-  height: number,
+  width: number | string,
+  height: number | string,
   backgroundColor: string,
   children?: React.Element<any>,
 };
@@ -11,8 +11,6 @@ type Props = {
 class Stage extends React.Component {
   props: Props;
   static defaultProps = {
-    width: 500,
-    height: 500,
     backgroundColor: 'black',
   };
   render() {

@@ -3,8 +3,8 @@
 // stage
 export const GAME_SIZE = 500;
 export const GAME_STYLE = {
-  width: GAME_SIZE,
-  height: GAME_SIZE,
+  width: '100vw',
+  height: '100vh',
   backgroundColor: '#333333',
   display: 'flex',
   flexDirection: 'column',
