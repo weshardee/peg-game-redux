@@ -31,7 +31,7 @@ const sliding = {
   damping: 23,
 };
 
-const WOBBLE_INTERVAL = 200;
+const WOBBLE_INTERVAL = 500;
 
 class PegMotion extends React.Component {
   props: Props;

@@ -9,8 +9,6 @@ import lerp from 'lerp';
 
 import type {PegType, PegState} from '../types';
 
-const LEAN_FACTOR = 0.02;
-
 type Props = {
   isExcited?: boolean,
   alive: number,
@@ -22,6 +20,7 @@ type Props = {
   id: string,
 };
 
+const LEAN_THRESHOLD = 0.5;
 const DUCK_THRESHOLD = 20;
 const GROUNDED_THRESHOLD = 5;
 
@@ -30,9 +29,11 @@ type State = {
 };
 
 function getSpriteState(peg: Peg): PegState {
-  if (peg.state.isGrounded) return 'front';
+  if (peg.state.isGrounded) {
+    if (Math.abs(peg.props.lean) > LEAN_THRESHOLD) return 'lean';
+    return 'front';
+  }
   const absZ = Math.abs(peg.props.z);
-  if (absZ < GROUNDED_THRESHOLD) return 'front';
   if (absZ < DUCK_THRESHOLD) return 'duck';
   return 'jump';
 }
@@ -43,8 +44,9 @@ class Peg extends React.Component {
     isGrounded: false,
   };
 
-  willRecieveProps(props: Props) {
-    const isGrounded = props.z === 0 && this.props.z === 0;
+  componentWillReceiveProps(nextProps: Props) {
+    const isGrounded = Math.abs(nextProps.z) < GROUNDED_THRESHOLD &&
+      Math.abs(this.props.z) < GROUNDED_THRESHOLD;
     if (isGrounded !== this.state.isGrounded) {
       this.setState({isGrounded});
     }
@@ -57,6 +59,7 @@ class Peg extends React.Component {
     const modifiedZ = Math.max(0, Math.abs(props.z) - DUCK_THRESHOLD);
     const spriteState = getSpriteState(this);
     const {src, pivot, size} = sprites[props.type][spriteState];
+    const flipX = spriteState === 'lean' && props.lean < 0;
     return (
       <Group x={props.x} y={props.y}>
         <Image
@@ -67,17 +70,22 @@ class Peg extends React.Component {
           width={55}
           height={34}
         />
-        <Image
-          alpha={props.alive}
-          src={src}
-          onClick={this._onTouch}
-          pivot={pivot}
-          rotation={props.lean * LEAN_FACTOR}
-          scale={props.alive}
-          width={size.w}
-          height={size.h}
-          y={-modifiedZ} /* reflect to sim a bounce*/
-        />
+        <div
+          style={{
+            transform: `scaleX(${flipX ? 1 : -1})`,
+          }}
+        >
+          <Image
+            alpha={props.alive}
+            src={src}
+            onClick={this._onTouch}
+            pivot={pivot}
+            scale={props.alive}
+            width={size.w}
+            height={size.h}
+            y={-modifiedZ} /* reflect to sim a bounce*/
+          />
+        </div>
       </Group>
     );
   }
