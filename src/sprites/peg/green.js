@@ -1,57 +1,37 @@
-{"frames": {
+import duckSVG from './green/duck.svg';
+import frontSVG from './green/front.svg';
+import jumpSVG from './green/jump.svg';
+import leanSVG from './green/lean.svg';
+import hurtSVG from './green/hurt.svg';
 
-"duck":
-{
-	"frame": {"x":1,"y":378,"w":69,"h":71},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":69,"h":71},
-	"sourceSize": {"w":69,"h":71},
-	"pivot": {"x":0.405797,"y":1}
-},
-"front":
-{
-	"frame": {"x":1,"y":190,"w":66,"h":92},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":66,"h":92},
-	"sourceSize": {"w":66,"h":92},
-	"pivot": {"x":0.484848,"y":1}
-},
-"hurt":
-{
-	"frame": {"x":1,"y":96,"w":69,"h":92},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":69,"h":92},
-	"sourceSize": {"w":69,"h":92},
-	"pivot": {"x":0.666667,"y":1}
-},
-"jump":
-{
-	"frame": {"x":1,"y":1,"w":67,"h":93},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":67,"h":93},
-	"sourceSize": {"w":67,"h":93},
-	"pivot": {"x":0.432836,"y":1}
-},
-"stand":
-{
-	"frame": {"x":1,"y":284,"w":66,"h":92},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":66,"h":92},
-	"sourceSize": {"w":66,"h":92},
-	"pivot": {"x":0.409091,"y":1}
-}},
-"meta": {
-	"app": "http://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "green.png",
-	"format": "RGBA8888",
-	"size": {"w":71,"h":450},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:b7542dceceb75c549c957db8beee5ed4:aa3e61733477543e041a802f6c3d0f64:88a31b4ea5b0b12da1c8dc038572b369$"
-}
-}
+import type {Sheet} from './types';
+
+const green: Sheet = {
+  duck: {
+    src: duckSVG,
+    size: {w: 69, h: 71},
+    pivot: {x: 0.405797, y: 1},
+  },
+  front: {
+    src: frontSVG,
+    size: {w: 66, h: 92},
+    pivot: {x: 0.484848, y: 1},
+  },
+  hurt: {
+    src: hurtSVG,
+    size: {w: 69, h: 92},
+    pivot: {x: 0.666667, y: 1},
+  },
+  jump: {
+    src: jumpSVG,
+    size: {w: 67, h: 93},
+    pivot: {x: 0.432836, y: 1},
+  },
+  lean: {
+    src: leanSVG,
+    size: {w: 66, h: 92},
+    pivot: {x: 0.409091, y: 1},
+  },
+};
+
+export default green;

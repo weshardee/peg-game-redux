@@ -5,6 +5,6 @@ export type Frame = {
   pivot: {x: number, y: number},
 };
 
-type State = 'front' | 'lean' | 'jump' | 'duck' | 'hurt';
+export type PegState = 'front' | 'lean' | 'jump' | 'duck' | 'hurt';
 
-export type Sheet = {[key: State]: Frame};
+export type Sheet = {[key: PegState]: Frame};
