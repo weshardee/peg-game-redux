@@ -1,5 +1,5 @@
 {
-  "name": "react-electron",
+  "name": "peg-game-react-redux",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -13,7 +13,6 @@
     "invariant": "^2.2.2",
     "lerp": "^1.0.3",
     "nullthrows": "^1.0.0",
-    "pixi": "^0.3.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-motion": "^0.4.7",
