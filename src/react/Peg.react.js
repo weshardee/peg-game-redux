@@ -2,12 +2,12 @@
 import React from 'react';
 import Image from './lib/Image.react';
 import Group from './lib/Group.react';
-import { onTouchPeg } from '../interactions';
+import {onTouchPeg} from '../interactions';
 import sprites from '../sprites/peg/peg';
 import shadow from '../sprites/peg/shadow.png';
 import lerp from 'lerp';
 
-import type { PegType } from '../types';
+import type {PegType} from '../types';
 
 const LEAN_FACTOR = 0.02;
 
@@ -26,10 +26,9 @@ class Peg extends React.Component {
   props: Props;
 
   render() {
-    const { props } = this;
+    const {props} = this;
     const groundNearnessFactor = lerp(1, 0, props.z / 600);
-    const { img, frames } = sprites[props.type];
-    const sprite = frames.front;
+    const {src, pivot, size} = sprites[props.type].front;
     return (
       <Group x={props.x} y={props.y}>
         <Image
@@ -42,14 +41,13 @@ class Peg extends React.Component {
         />
         <Image
           alpha={props.alive}
-          src={img}
-          srcOffset={sprite.frame}
+          src={src}
           onClick={this._onTouch}
-          pivot={sprite.pivot}
+          pivot={pivot}
           rotation={props.lean * LEAN_FACTOR}
           scale={props.alive * 0.5}
-          width={sprite.frame.w}
-          height={sprite.frame.h}
+          width={size.w}
+          height={size.h}
           y={-Math.abs(props.z)} /* reflect to sim a bounce*/
         />
       </Group>
