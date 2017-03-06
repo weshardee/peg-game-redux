@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Peg from './Peg.react';
+import PegMotion from './PegMotion.react';
 import { TransitionMotion, spring } from 'react-motion';
 
 import type { Peg as PegState } from '../types';
@@ -54,7 +54,6 @@ class Pegs extends React.Component {
   props: Props;
 
   willLeave() {
-    // triggered when c's gone. Keeping c until its width/height reach 0.
     return { alive: spring(0) };
   }
 
@@ -71,7 +70,7 @@ class Pegs extends React.Component {
         children={(items: Array<ChildProps>) => (
           <div>
             {items.map((item: ChildProps) => (
-              <Peg
+              <PegMotion
                 key={item.key}
                 {...item.data}
                 alive={item.style.alive}
