@@ -30,7 +30,6 @@ class Peg extends React.Component {
     const groundNearnessFactor = lerp(1, 0, props.z / 600);
     const { img, frames } = sprites[props.type];
     const sprite = frames.front;
-    console.log(sprite);
     return (
       <Group x={props.x} y={props.y}>
         <Image
