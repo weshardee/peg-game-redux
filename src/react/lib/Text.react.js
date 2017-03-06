@@ -13,8 +13,6 @@ type Props = {
   align?: Align,
 };
 
-console.log(OpenSansBold);
-
 const transforms: { [key: Align]: ?string } = {
   center: 'translateX(-50%)',
   right: 'translateX(-100%)',
