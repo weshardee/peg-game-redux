@@ -18,7 +18,7 @@ export const BOARD_Y = 160;
 // grid
 export const BOARD_SIZE = 5;
 export const Y_HEX_FACTOR = 0.8;
-export const BOARD_GRID_SIZE = 65;
+export const BOARD_GRID_SIZE = 60;
 export const BOARD_ROW_HEIGHT = BOARD_GRID_SIZE * Y_HEX_FACTOR;
 
 // audio
@@ -38,15 +38,6 @@ export const PEG_PROPS = {
     height: 66,
     length: 5,
   },
-};
-
-// tiles
-export const TILE_PROPS = {
-  pivot: { x: 0.5, y: 0.375 },
-  width: BOARD_GRID_SIZE,
-  height: 89,
-  src: '/assets/images/tiles.png',
-  length: 4, // only for Phaser
 };
 
 // death animation
