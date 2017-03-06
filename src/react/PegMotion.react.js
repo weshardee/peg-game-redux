@@ -1,9 +1,9 @@
 // @flow
-import { Motion, spring } from 'react-motion';
+import {Motion, spring} from 'react-motion';
 import React from 'react';
 import Peg from './Peg.react';
-import { boardToScreenPosition } from '../utils';
-import type { Peg as PegProps } from '../types';
+import {boardToScreenPosition} from '../utils';
+import type {Peg as PegProps} from '../types';
 
 type Props = PegProps & {
   isExcited?: boolean,
@@ -22,8 +22,8 @@ type MotionProps = {
 };
 
 const falling = {
-  stiffness: 350,
-  damping: 20,
+  stiffness: 100,
+  damping: 10,
 };
 
 const sliding = {
@@ -35,17 +35,17 @@ const WOBBLE_INTERVAL = 200;
 
 class PegMotion extends React.Component {
   props: Props;
-  state: State = { lean: 0 };
+  state: State = {lean: 0};
 
   _wobbleInterval: ?number;
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.isExcited) {
-      this.setState({ lean: 1 });
+      this.setState({lean: 1});
       this._wobbleInterval = setInterval(this._wobble, WOBBLE_INTERVAL);
     } else if (this._wobbleInterval) {
       clearInterval(this._wobbleInterval);
-      this.setState({ lean: 0 });
+      this.setState({lean: 0});
     }
   }
 
@@ -56,27 +56,27 @@ class PegMotion extends React.Component {
   }
 
   render() {
-    const { id, pos, alive, type } = this.props;
+    const {id, pos, alive, type} = this.props;
     const screenPos = boardToScreenPosition(pos);
-    const { lean } = this.state;
-    const interpolate = ({ z, lean, x, y }: MotionProps) => (
+    const {lean} = this.state;
+    const interpolate = ({z, lean, x, y}: MotionProps) => (
       <Peg x={x} y={y} z={z} lean={lean} id={id} alive={alive} type={type} />
     );
     return (
       <Motion
-        defaultStyle={{ z: 600, lean, x: screenPos.x, y: screenPos.y }}
+        defaultStyle={{z: 600, lean, x: screenPos.x, y: screenPos.y}}
         style={{
-          z: spring(0, falling),
           lean: spring(lean),
           x: spring(screenPos.x, sliding),
           y: spring(screenPos.y, sliding),
+          z: spring(0, falling),
         }}
         children={interpolate}
       />
     );
   }
 
-  _wobble = () => this.setState({ lean: -this.state.lean });
+  _wobble = () => this.setState({lean: -this.state.lean});
 }
 
 export default PegMotion;

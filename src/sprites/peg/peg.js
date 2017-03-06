@@ -5,7 +5,15 @@ import green from './green';
 import pink from './pink';
 import yellow from './yellow';
 
-import type {Sheet} from './types';
+export type Frame = {
+  src: string,
+  size: {w: number, h: number},
+  pivot: {x: number, y: number},
+};
+
+export type PegState = 'front' | 'lean' | 'jump' | 'duck' | 'hurt';
+
+export type Sheet = {[key: PegState]: Frame};
 
 const sprites = {beige, yellow, blue, pink, green};
 

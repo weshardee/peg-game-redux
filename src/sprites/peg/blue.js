@@ -5,7 +5,7 @@ import jumpSVG from './blue/jump.svg';
 import leanSVG from './blue/lean.svg';
 import hurtSVG from './blue/hurt.svg';
 
-import type {Sheet} from './types';
+import type {Sheet} from './peg';
 
 const blue: Sheet = {
   duck: {

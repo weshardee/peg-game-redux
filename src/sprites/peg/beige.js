@@ -5,7 +5,7 @@ import jumpSVG from './beige/jump.svg';
 import leanSVG from './beige/lean.svg';
 import hurtSVG from './beige/hurt.svg';
 
-import type {Sheet} from './types';
+import type {Sheet} from './peg';
 
 const beige: Sheet = {
   duck: {

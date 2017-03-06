@@ -3,7 +3,7 @@
 // grid
 export const BOARD_SIZE = 5;
 export const Y_HEX_FACTOR = 0.8;
-export const BOARD_GRID_SIZE = 60;
+export const BOARD_GRID_SIZE = 92;
 export const BOARD_ROW_HEIGHT = BOARD_GRID_SIZE * Y_HEX_FACTOR;
 
 // audio
@@ -16,7 +16,7 @@ export const RESET_URI = '/assets/images/return.png';
 
 // pegs
 export const PEG_PROPS = {
-  pivot: { x: 0.5, y: 0.8 },
+  pivot: {x: 0.5, y: 0.8},
   sheet: {
     uri: '/assets/images/pegs.png',
     width: 40,
