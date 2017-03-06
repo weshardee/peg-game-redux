@@ -1,20 +1,5 @@
 // @flow
 
-// stage
-export const GAME_SIZE = 500;
-export const GAME_STYLE = {
-  width: '100vw',
-  height: '100vh',
-  backgroundColor: '#333333',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'relative',
-};
-export const BOARD_X = GAME_SIZE / 2;
-export const BOARD_Y = 160;
-
 // grid
 export const BOARD_SIZE = 5;
 export const Y_HEX_FACTOR = 0.8;
