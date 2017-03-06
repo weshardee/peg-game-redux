@@ -8,6 +8,7 @@ import type { Peg as PegProps } from '../types';
 import { onTouchPeg } from '../interactions';
 import sprites from '../sprites/peg/peg';
 import shadow from '../sprites/peg/shadow.png';
+import lerp from 'lerp';
 
 type Props = PegProps & {
   isExcited?: boolean,
@@ -26,7 +27,7 @@ type AnimateProps = {
 };
 
 const falling = {
-  stiffness: 400,
+  stiffness: 350,
   damping: 20,
 };
 
@@ -69,7 +70,9 @@ class Peg extends React.Component {
         <Image
           alpha={alive}
           src={shadow}
-          scale={alive * 0.5} /* TODO handle retina better*/
+          scale={
+            alive * 0.5 * lerp(1, 0, offsetY / 600)
+          } /* TODO handle retina better*/
           width={56}
           height={22}
         />
