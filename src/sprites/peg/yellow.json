@@ -1,6 +1,6 @@
 {"frames": {
 
-"duck.png":
+"duck":
 {
 	"frame": {"x":1,"y":84,"w":68,"h":67},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":68,"h":67},
 	"pivot": {"x":0.397059,"y":1}
 },
-"front.png":
+"front":
 {
 	"frame": {"x":1,"y":238,"w":66,"h":82},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":66,"h":82},
 	"pivot": {"x":0.484848,"y":1}
 },
-"hurt.png":
+"hurt":
 {
 	"frame": {"x":1,"y":1,"w":69,"h":81},
 	"rotated": false,
@@ -27,7 +27,7 @@
 	"sourceSize": {"w":69,"h":81},
 	"pivot": {"x":0.623188,"y":1}
 },
-"jump.png":
+"jump":
 {
 	"frame": {"x":1,"y":153,"w":67,"h":83},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":67,"h":83},
 	"pivot": {"x":0.447761,"y":1}
 },
-"stand.png":
+"stand":
 {
 	"frame": {"x":1,"y":322,"w":66,"h":82},
 	"rotated": false,
@@ -52,6 +52,6 @@
 	"format": "RGBA8888",
 	"size": {"w":71,"h":405},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:0168b8c4fccd147cc8d717a40831ab5c:dd08e2177f1f93c60daa531e719e6d59:fc2f53696ee5d33abf91076847e3d453$"
+	"smartupdate": "$TexturePacker:SmartUpdate:06c814b734e777a6100608c50f6e7199:dd08e2177f1f93c60daa531e719e6d59:fc2f53696ee5d33abf91076847e3d453$"
 }
 }
