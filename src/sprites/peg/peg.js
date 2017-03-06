@@ -11,34 +11,34 @@ import jsonGreen from './green.json';
 import jsonYellow from './yellow.json';
 import jsonPink from './pink.json';
 
-import type { Sheet, Frame } from '../types';
+import type { Frame } from '../types';
 
-type FramesJSON = { [key: string]: Frame };
+type PegFrame = 'front' | 'duck' | 'jump' | 'lean';
+type FrameDefs = { [key: PegFrame]: Frame };
+type JSON = {
+  frames: FrameDefs,
+};
+type PegSheet = { img: string, frames: FrameDefs };
 
-const beige: Sheet = {
-  type: 'framed',
+const beige: PegSheet = {
   img: beigeImg,
-  frames: (jsonBeige: FramesJSON),
+  frames: (jsonBeige: JSON).frames,
 };
-const green: Sheet = {
-  type: 'framed',
+const green: PegSheet = {
   img: greenImg,
-  frames: (jsonGreen: FramesJSON),
+  frames: (jsonGreen: JSON).frames,
 };
-const yellow: Sheet = {
-  type: 'framed',
+const yellow: PegSheet = {
   img: yellowImg,
-  frames: (jsonYellow: FramesJSON),
+  frames: (jsonYellow: JSON).frames,
 };
-const blue: Sheet = {
-  type: 'framed',
+const blue: PegSheet = {
   img: blueImg,
-  frames: (jsonBlue: FramesJSON),
+  frames: (jsonBlue: JSON).frames,
 };
-const pink: Sheet = {
-  type: 'framed',
+const pink: PegSheet = {
   img: pinkImg,
-  frames: (jsonPink: FramesJSON),
+  frames: (jsonPink: JSON).frames,
 };
 
 const sprites = { beige, green, blue, yellow, pink };
