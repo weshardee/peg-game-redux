@@ -30,6 +30,7 @@ class Peg extends React.Component {
     const groundNearnessFactor = lerp(1, 0, props.z / 600);
     const { img, frames } = sprites[props.type];
     const sprite = frames.front;
+    console.log(sprite);
     return (
       <Group x={props.x} y={props.y}>
         <Image
@@ -43,6 +44,7 @@ class Peg extends React.Component {
         <Image
           alpha={props.alive}
           src={img}
+          srcOffset={sprite.frame}
           onClick={this._onTouch}
           pivot={sprite.pivot}
           rotation={props.lean * LEAN_FACTOR}

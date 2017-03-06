@@ -13,6 +13,7 @@ type DefaultProps = {
   x: number,
   y: number,
   pivot: { x: number, y: number },
+  srcOffset: { x: number, y: number },
   frame: number,
   onClick: () => void,
   alpha: number,
@@ -35,16 +36,18 @@ class Image extends React.Component<DefaultProps, Props, void> {
     frame: 0,
     alpha: 1,
     scale: 1,
+    srcOffset: { x: 0, y: 0 },
   };
 
   props: Props;
 
   render(): React.Element<any> {
     const { props } = this;
-    const { x, y, rotation, scale, alpha, width, height } = props;
+    const { x, y, rotation, scale, alpha, width, height, srcOffset } = props;
     const style = {
       // sprite sheet image and offset
       backgroundImage: `url(${props.src})`,
+      backgroundPosition: `-${srcOffset.x}px -${srcOffset.y}px`,
       // sizing
       width,
       height,
