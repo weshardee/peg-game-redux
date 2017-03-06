@@ -30,7 +30,7 @@ class App extends React.Component {
 
   _layout = () => {
     this.setState(getWindowDimensions());
-  }
+  };
 
   render() {
     return (
@@ -42,7 +42,9 @@ class App extends React.Component {
         <Group y={14} x={this.state.width - 20}>
           <StatusMsg />
         </Group>
-        <ResetBtn x={25} y={25} />
+        <Group x={5} y={5}>
+          <ResetBtn />
+        </Group>
       </Stage>
     );
   }
