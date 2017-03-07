@@ -28,21 +28,21 @@ type State = {
   isGrounded: boolean,
 };
 
-function getSpriteState(peg: Peg): PegState {
-  if (peg.state.isGrounded) {
-    if (Math.abs(peg.props.lean) > LEAN_THRESHOLD) return 'lean';
-    return 'front';
-  }
-  const absZ = Math.abs(peg.props.z);
-  if (absZ < DUCK_THRESHOLD) return 'duck';
-  return 'jump';
-}
-
 class Peg extends React.Component {
   props: Props;
   state: State = {
     isGrounded: false,
   };
+
+  getSpriteState(): PegState {
+    if (this.state.isGrounded) {
+      if (Math.abs(this.props.lean) > LEAN_THRESHOLD) return 'lean';
+      return 'front';
+    }
+    const absZ = Math.abs(this.props.z);
+    if (absZ < DUCK_THRESHOLD) return 'duck';
+    return 'jump';
+  }
 
   componentWillReceiveProps(nextProps: Props) {
     const isGrounded = Math.abs(nextProps.z) < GROUNDED_THRESHOLD &&
@@ -57,7 +57,7 @@ class Peg extends React.Component {
     const groundNearnessFactor = lerp(1, 0, props.z / 600);
     // provide a buffer during the fall to pause in the duck animation
     const modifiedZ = Math.max(0, Math.abs(props.z) - DUCK_THRESHOLD);
-    const spriteState = getSpriteState(this);
+    const spriteState = this.getSpriteState(this);
     const {src, pivot, size} = sprites[props.type][spriteState];
     const flipX = spriteState === 'lean' && props.lean < 0;
     return (
