@@ -65,7 +65,6 @@ class PegMotion extends React.Component {
     const {id, pos, alive, type} = this.props;
     const {x, y} = boardToScreenPosition(pos);
     const {shake, hop} = this.state;
-    console.log(hop);
     const interpolate = ({x, y, z}: MotionProps) => (
       <Peg
         x={x}
