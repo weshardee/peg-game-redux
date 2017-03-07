@@ -54,9 +54,9 @@ class Peg extends React.Component {
 
   render() {
     const {props} = this;
-    const groundNearnessFactor = lerp(1, 0, props.z / 600);
     // provide a buffer during the fall to pause in the duck animation
     const modifiedZ = Math.max(0, Math.abs(props.z) - DUCK_THRESHOLD);
+    const groundNearnessFactor = lerp(1, 0, modifiedZ / 600);
     const spriteState = this.getSpriteState(this);
     const {src, pivot, size} = sprites[props.type][spriteState];
     const flipX = spriteState === 'lean' && props.lean < 0;

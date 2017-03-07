@@ -4,6 +4,8 @@ import React from 'react';
 import Peg from './Peg.react';
 import {boardToScreenPosition} from '../utils';
 import type {Peg as PegProps} from '../types';
+import {TweenMax, Power0} from 'gsap';
+import gsapReactPlugin from 'gsap-react-plugin';
 
 type Props = PegProps & {
   isExcited?: boolean,
@@ -11,11 +13,11 @@ type Props = PegProps & {
 };
 
 type State = {
-  lean: 0 | 1 | -1,
+  hop: number,
+  shake: number,
 };
 
 type MotionProps = {
-  lean: number,
   x: number,
   y: number,
   z: number,
@@ -31,45 +33,58 @@ const sliding = {
   damping: 23,
 };
 
-const WOBBLE_INTERVAL = 500;
+const HOP_INTERVAL = 0.7;
+const HOP_HEIGHT = 50;
 
 class PegMotion extends React.Component {
   props: Props;
-  state: State = {lean: 0};
+  state: State = {shake: 0, hop: 0};
 
-  _wobbleInterval: ?number;
+  _hopTween;
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.isExcited && !this.props.isExcited) {
-      this.setState({lean: 1});
-      this._wobbleInterval = setInterval(this._wobble, WOBBLE_INTERVAL);
-    } else if (!nextProps.isExcited && this._wobbleInterval != null) {
-      clearInterval(this._wobbleInterval);
-      this._wobbleInterval = null;
-      this.setState({lean: 0});
+      this._hopTween = TweenMax.to(this, HOP_INTERVAL, {
+        state: {hop: 1},
+        yoyo: true,
+        repeat: -1,
+        ease: Power0.easeNone,
+      });
+    } else if (!nextProps.isExcited && this._hopTween != null) {
+      this._stopHopping();
     }
   }
 
   componentWillUnmount() {
-    if (this._wobbleInterval) {
-      clearInterval(this._wobbleInterval);
+    if (this._hopTween) {
+      this._hopTween.kill();
     }
   }
 
   render() {
     const {id, pos, alive, type} = this.props;
-    const screenPos = boardToScreenPosition(pos);
-    const {lean} = this.state;
-    const interpolate = ({z, lean, x, y}: MotionProps) => (
-      <Peg x={x} y={y} z={z} lean={lean} id={id} alive={alive} type={type} />
+    const {x, y} = boardToScreenPosition(pos);
+    const {shake, hop} = this.state;
+    console.log(hop);
+    const interpolate = ({x, y, z}: MotionProps) => (
+      <Peg
+        x={x}
+        y={y}
+        z={z + Math.sin(hop * Math.PI) * HOP_HEIGHT}
+        lean={Math.sin(shake * Math.PI)}
+        id={id}
+        alive={alive}
+        type={type}
+      />
     );
     return (
       <Motion
-        defaultStyle={{z: 600, lean, x: screenPos.x, y: screenPos.y}}
+        defaultStyle={{x, y, z: 600, shake, hop}}
         style={{
-          lean: spring(lean),
-          x: spring(screenPos.x, sliding),
-          y: spring(screenPos.y, sliding),
+          hop: spring(hop, falling),
+          shake: spring(shake),
+          x: spring(x, sliding),
+          y: spring(y, sliding),
           z: spring(0, falling),
         }}
         children={interpolate}
@@ -77,9 +92,12 @@ class PegMotion extends React.Component {
     );
   }
 
-  _wobble = () => {
-    this.setState({lean: -this.state.lean});
-  };
+  _stopHopping() {
+    if (this._hopTween) {
+      this._hopTween.repeat(0);
+      this._hopTween = null;
+    }
+  }
 }
 
 export default PegMotion;
