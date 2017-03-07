@@ -5,7 +5,7 @@ import {TransitionMotion, spring} from 'react-motion';
 
 import type {Peg as PegState} from '../types';
 
-type Props = {pegs: Array<PegState>, excited: ?string};
+type Props = {pegs: Array<PegState>, excited: ?string, buzzed: ?string};
 
 type MotionStyle = {
   alive: number,
@@ -62,7 +62,7 @@ class Pegs extends React.Component {
   }
 
   render() {
-    const {pegs, excited} = this.props;
+    const {pegs, excited, buzzed} = this.props;
     return (
       <TransitionMotion
         willLeave={this.willLeave}
@@ -81,6 +81,7 @@ class Pegs extends React.Component {
                   {...item.data}
                   alive={item.style.alive}
                   isExcited={excited === item.key}
+                  isBuzzed={buzzed === item.key}
                 />
               ))}
           </div>

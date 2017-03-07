@@ -4,11 +4,12 @@ import React from 'react';
 import Peg from './Peg.react';
 import {boardToScreenPosition} from '../utils';
 import type {Peg as PegProps} from '../types';
-import {TweenMax, Power0} from 'gsap';
+import {TweenMax, Circ, Power0} from 'gsap';
 import gsapReactPlugin from 'gsap-react-plugin';
 
 type Props = PegProps & {
   isExcited?: boolean,
+  isBuzzed?: boolean,
   alive: number,
 };
 
@@ -33,26 +34,28 @@ const sliding = {
   damping: 23,
 };
 
-const HOP_INTERVAL = 0.7;
-const HOP_HEIGHT = 50;
+const HOP_INTERVAL = 0.3; // seconds
+const HOP_HEIGHT = 70;
+
+const SHAKE_DURATION = 0.25; // seconds
 
 class PegMotion extends React.Component {
   props: Props;
   state: State = {shake: 0, hop: 0};
 
   _hopTween;
+  _shakeCount: number = 0;
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.isExcited && !this.props.isExcited) {
-      this._hopTween = TweenMax.to(this, HOP_INTERVAL, {
-        state: {hop: 1},
-        yoyo: true,
-        repeat: -1,
-        ease: Power0.easeNone,
-      });
-    } else if (!nextProps.isExcited && this._hopTween != null) {
-      this._stopHopping();
+      this._hop(nextProps);
     }
+    if (nextProps.isBuzzed) {
+      this._shake();
+    }
+    // else if (!nextProps.isExcited && this._hopTween != null) {
+    //   this._stopHopping();
+    // }
   }
 
   componentWillUnmount() {
@@ -65,12 +68,13 @@ class PegMotion extends React.Component {
     const {id, pos, alive, type} = this.props;
     const {x, y} = boardToScreenPosition(pos);
     const {shake, hop} = this.state;
+    const lean = Math.sin(shake);
     const interpolate = ({x, y, z}: MotionProps) => (
       <Peg
         x={x}
         y={y}
-        z={z + Math.sin(hop * Math.PI) * HOP_HEIGHT}
-        lean={Math.sin(shake * Math.PI)}
+        z={z + hop}
+        lean={lean}
         id={id}
         alive={alive}
         type={type}
@@ -91,12 +95,31 @@ class PegMotion extends React.Component {
     );
   }
 
-  _stopHopping() {
-    if (this._hopTween) {
-      this._hopTween.repeat(0);
-      this._hopTween = null;
+  _hop = (props: Props = this.props) => {
+    if (props.isExcited) {
+      this._hopTween = TweenMax.to(this, HOP_INTERVAL, {
+        state: {hop: HOP_HEIGHT},
+        yoyo: true,
+        repeat: 1,
+        ease: Circ.easeOut,
+        onComplete: this._hop,
+      });
     }
-  }
+  };
+
+  _shake = () => {
+    TweenMax.to(this, SHAKE_DURATION, {
+      state: {shake: Math.PI * 2},
+      yoyo: true,
+      repeat: 1,
+      ease: Power0.easeNone,
+      onComplete: this._resetShake(),
+    });
+  };
+
+  _resetShake = () => {
+    this.setState({shake: 0});
+  };
 }
 
 export default PegMotion;

@@ -21,7 +21,7 @@ type Props = {
 };
 
 const LEAN_THRESHOLD = 0.5;
-const DUCK_THRESHOLD = 20;
+const DUCK_THRESHOLD = 40;
 const GROUNDED_THRESHOLD = 5;
 
 type State = {
