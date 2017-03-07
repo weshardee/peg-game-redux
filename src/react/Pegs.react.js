@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import PegMotion from './PegMotion.react';
-import { TransitionMotion, spring } from 'react-motion';
+import {TransitionMotion, spring} from 'react-motion';
 
-import type { Peg as PegState } from '../types';
+import type {Peg as PegState} from '../types';
 
-type Props = { pegs: Array<PegState>, excited: ?string };
+type Props = {pegs: Array<PegState>, excited: ?string};
 
 type MotionStyle = {
   alive: number,
@@ -49,34 +49,40 @@ type ChildProps = {
 //     return <Group y={0} x={0}>{pegs}</Group>;
 //   }
 // }
+//
+function sortItems(a: ChildProps, b: ChildProps): number {
+  return a.data.pos.y - b.data.pos.y;
+}
 
 class Pegs extends React.Component {
   props: Props;
 
   willLeave() {
-    return { alive: spring(0) };
+    return {alive: spring(0)};
   }
 
   render() {
-    const { pegs, excited } = this.props;
+    const {pegs, excited} = this.props;
     return (
       <TransitionMotion
         willLeave={this.willLeave}
         styles={pegs.map(peg => ({
           key: peg.id,
-          style: { alive: 1 },
+          style: {alive: 1},
           data: peg,
         }))}
         children={(items: Array<ChildProps>) => (
           <div>
-            {items.map((item: ChildProps) => (
-              <PegMotion
-                key={item.key}
-                {...item.data}
-                alive={item.style.alive}
-                isExcited={excited === item.key}
-              />
-            ))}
+            {items
+              .sort(sortItems)
+              .map((item: ChildProps) => (
+                <PegMotion
+                  key={item.key}
+                  {...item.data}
+                  alive={item.style.alive}
+                  isExcited={excited === item.key}
+                />
+              ))}
           </div>
         )}
       />
