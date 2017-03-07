@@ -5,7 +5,7 @@ import './index.css';
 import Store from './redux/Store';
 
 // react view
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './react/App.react';

@@ -40,16 +40,21 @@ class PegMotion extends React.Component {
   _wobbleInterval: ?number;
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.isExcited) {
+    if (nextProps.isExcited && !nextProps.alive) {
+      console.log(nextProps.id, 'excited and dead');
+    }
+    if (nextProps.isExcited && !this.props.isExcited) {
       this.setState({lean: 1});
       this._wobbleInterval = setInterval(this._wobble, WOBBLE_INTERVAL);
-    } else if (this._wobbleInterval) {
+    } else if (!nextProps.isExcited && this._wobbleInterval != null) {
       clearInterval(this._wobbleInterval);
+      this._wobbleInterval = null;
       this.setState({lean: 0});
     }
   }
 
   componentWillUnmount() {
+    console.log('unmount', this.props.id);
     if (this._wobbleInterval) {
       clearInterval(this._wobbleInterval);
     }
@@ -76,7 +81,10 @@ class PegMotion extends React.Component {
     );
   }
 
-  _wobble = () => this.setState({lean: -this.state.lean});
+  _wobble = () => {
+    console.log(this.props.id, 'wobble');
+    this.setState({lean: -this.state.lean});
+  };
 }
 
 export default PegMotion;
