@@ -4,7 +4,7 @@
 // reducers
 // -----------------------------------------------------------------------------
 
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 
 import board from './reducers/board';
 import pegs from './reducers/pegs';
@@ -26,12 +26,22 @@ export const reducers = combineReducers({
 // selectors
 // -----------------------------------------------------------------------------
 
-import type { BoardState } from './reducers/board';
-import type { BuzzedState } from './reducers/buzzed';
-import type { ExcitedState } from './reducers/excited';
-import type { PegsState } from './reducers/pegs';
-import type { NumPegsState } from './reducers/numPegs';
-import type { PhaseState } from './reducers/phase';
+import type {BoardState} from './reducers/board';
+import type {BuzzedState} from './reducers/buzzed';
+import type {ExcitedState} from './reducers/excited';
+import type {PegsState} from './reducers/pegs';
+import type {NumPegsState} from './reducers/numPegs';
+import type {PhaseState} from './reducers/phase';
+
+// aggregate types for easy access from other modules
+export type {
+  BoardState,
+  BuzzedState,
+  ExcitedState,
+  PegsState,
+  NumPegsState,
+  PhaseState,
+};
 
 export type State = {
   board: BoardState,
