@@ -43,7 +43,7 @@ class PegMotion extends React.Component {
   props: Props;
   state: State = {shake: 0, hop: 0};
 
-  _hopTween;
+  _hopTween: Object; // TODO get TweenMax typings
   _shakeCount: number = 0;
 
   componentWillReceiveProps(nextProps: Props) {
