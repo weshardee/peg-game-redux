@@ -1,17 +1,19 @@
 // @flow
 import Store from './Store';
 
-import { areEqual, getMiddlePosition } from '../utils';
+import {areEqual, getMiddlePosition} from '../utils';
 import nullthrows from 'nullthrows';
 import shortid from 'shortid';
 
-import { default as PegSheets } from '../sprites/peg/peg';
-import type { Coords, Peg, PegType } from '../types';
+import {default as PegSheets} from '../sprites/peg/peg';
+import type {Coords, Peg, PegType} from '../types';
 
-export type WipeAction = { type: 'WIPE_BOARD' };
-export const wipe = () => ({ type: 'WIPE_BOARD' });
+export type TouchAction = {type: 'TOUCH'};
 
-export type PopulateAction = { type: 'POPULATE', pegs: Array<Peg> };
+export type WipeAction = {type: 'WIPE_BOARD'};
+export const wipe = () => ({type: 'WIPE_BOARD'});
+
+export type PopulateAction = {type: 'POPULATE', pegs: Array<Peg>};
 export const populate = (emptyPos: Coords): PopulateAction => {
   const pegs = [];
   Store.getState().board.forEach(position => {
@@ -19,13 +21,13 @@ export const populate = (emptyPos: Coords): PopulateAction => {
       pegs.push(makePeg(position));
     }
   });
-  return { type: 'POPULATE', pegs };
+  return {type: 'POPULATE', pegs};
 };
 
-export type ExciteAction = { type: 'EXCITE', id: string };
-export const excite = (id: string): ExciteAction => ({ type: 'EXCITE', id });
+export type ExciteAction = {type: 'EXCITE', id: string};
+export const excite = (id: string): ExciteAction => ({type: 'EXCITE', id});
 
-export type BuzzAction = { type: 'BUZZ', id: string };
+export type BuzzAction = {type: 'BUZZ', id: string};
 export const buzz = (id: string): BuzzAction => ({
   type: 'BUZZ',
   id,
@@ -38,25 +40,22 @@ export type MoveAction = {
   to: Coords,
   kill: Peg,
 };
-export const moveTo = (to: Coords): ?MoveAction | BuzzAction => {
+export const move = (pegID: string, to: Coords): ?MoveAction | BuzzAction => {
   const state = Store.getState();
-  const { excited, pegs, board } = state;
-  if (!excited) {
-    return;
-  }
-  const from = pegs[excited].pos;
+  const {pegs, board} = state;
+  const from = pegs[pegID].pos;
   if (!from || board.get(to)) {
-    return buzz(excited);
+    return buzz(pegID);
   }
   const middlePos = getMiddlePosition(from, to);
   const middleID = board.get(middlePos);
   if (!middleID) {
-    return buzz(excited);
+    return buzz(pegID);
   }
   const kill = nullthrows(pegs[middleID]);
   return {
     type: 'MOVE',
-    id: excited,
+    id: pegID,
     from,
     to,
     kill,
@@ -97,6 +96,7 @@ function makePeg(pos: Coords): Peg {
 // -----------------------------------------------------------------------------
 
 export type Action =
+  | TouchAction
   | PopulateAction
   | WipeAction
   | ExciteAction
